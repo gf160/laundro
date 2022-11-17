@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gas.webapp.main.smsSendHist.persistence.SmsSendHistMapper">
+    <insert id="insertSmsSendHistData">
+        INSERT INTO cm_sms_send_hist
+          (USER_NO, YMDHMS, SEND_RESULT, FAIL_CODE, FAIL_MESSAGE)
+        VALUES
+          (#{userNo}, CAST(CURRENT_TIMESTAMP AS INT), #{sendResult}, #{failCode}, #{failMessage})
+          ;
+    </insert>
+</mapper>

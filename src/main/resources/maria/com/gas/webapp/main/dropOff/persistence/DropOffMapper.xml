@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gas.webapp.main.dropOff.persistence.DropOffMapper">
+    <insert id="insertDropOffData">
+        <selectKey resultType="int" keyProperty="newUserNo" order="BEFORE">
+            SELECT (IFNULL(MAX(USER_NO), 0) + 1) AS NEW_USER_NO FROM CM_USER_INFO;
+        </selectKey>
+        INSERT INTO CM_USER_INFO
+          (USER_NO, USER_NAME, USER_NUMBER, USER_ADDRESS, LAT, LNG,
+            MEMO, STORE_DATE, STORE_IMG_NO, DUE_DATE, TOTAL_CNT, TOTAL_PRICE,
+            TAKE_OFF_TYPE, TAKE_OFF_DATE, TAKE_OFF_IMG_NO)
+        VALUES
+          (#{newUserNo}, #{userName}, #{userNumber}, #{userAddress}, NULL, NULL,
+            #{memo}, #{storeDate}, NULL, #{dueDate}, #{totalCnt}, #{totalPrice},
+            0, NULL, NULL);
+
+        <foreach collection="laundryList" index="idx" item="item">
+            INSERT INTO CM_LAUNDRY_INFO
+              (USER_NO, SEQ_NO, CLOTH_TYPE, CLOTH_GRP_NO, CLOTH_SUB_GRP_NO, REPAIR_TEXT)
+            VALUES
+              (#{newUserNo}, #{idx} + 1, #{item.clothType}, #{item.clothGrpNo}, #{item.clothSubGrpNo}, #{item.repairText});
+        </foreach>
+    </insert>
+</mapper>

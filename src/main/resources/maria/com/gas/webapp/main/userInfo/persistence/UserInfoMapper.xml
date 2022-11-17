@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gas.webapp.main.userInfo.persistence.UserInfoMapper">
+
+    <resultMap type="com.gas.webapp.main.dropOff.dto.UserInfoDto" id="resultUserInfo">
+        <result property="userNo"    				column="USER_NO"/>
+        <result property="userName"    				column="USER_NAME"/>
+        <result property="userNumber"    			column="USER_NUMBER"/>
+        <result property="dueDate"   			    column="DUE_DATE"/>
+    </resultMap>
+
+    <select id="selectUserInfoList" resultMap="resultUserInfo">
+        SELECT USER_NO
+              , USER_NAME
+              , USER_NUMBER
+              , DUE_DATE
+          FROM CM_USER_INFO
+         WHERE TAKE_OFF_TYPE = 0
+          ;
+    </select>
+</mapper>

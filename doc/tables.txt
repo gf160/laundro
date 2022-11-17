@@ -1,0 +1,54 @@
+CREATE TABLE `cm_user_info` (
+  `USER_NO` int(11) NOT NULL COMMENT '사용자번호(순번)',
+  `USER_NAME` varchar(40) NOT NULL COMMENT '사용자명(맡긴사람정보)',
+  `USER_NUMBER` varchar(40) NOT NULL COMMENT '전화번호(맡긴사람정보)',
+  `USER_ADDRESS` varchar(255) NOT NULL COMMENT '주소(맡긴사람정보)',
+  `LAT` decimal(18,10) DEFAULT NULL COMMENT '위도',
+  `LNG` decimal(18,10) DEFAULT NULL COMMENT '경도',
+  `MEMO` text DEFAULT NULL COMMENT '특이사항/비고',
+  `STORE_DATE` varchar(14) NOT NULL COMMENT '맡긴 날짜',
+  `STORE_IMG_NO` int(11) DEFAULT NULL COMMENT '입고 사진 번호',
+  `DUE_DATE` varchar(14) NOT NULL COMMENT '예상 완료일 또는 사용자가 요청한 날짜(문자메세지 발송)',
+  `TOTAL_CNT` int(11) NOT NULL COMMENT '최종 세탁물 갯수',
+  `TOTAL_PRICE` int(11) NOT NULL COMMENT '최종 가격',
+  `TAKE_OFF_TYPE` int(1) NOT NULL DEFAULT 0 COMMENT '반출여부(0: 미반출, 1: 반출완료)',
+  `TAKE_OFF_DATE` varchar(14) DEFAULT NULL COMMENT '반출날짜',
+  `TAKE_OFF_IMG_NO` int(11) DEFAULT NULL COMMENT '반출 사진번호',
+  PRIMARY KEY (`USER_NO`),
+  KEY `cm_laundry_info_idx1` (`USER_NAME`),
+  KEY `cm_laundry_info_idx2` (`USER_NUMBER`),
+  KEY `cm_laundry_info_idx3` (`TAKE_OFF_TYPE`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='맡긴사람정보';
+
+
+CREATE TABLE `cm_laundry_info` (
+  `USER_NO` int(11) NOT NULL COMMENT '사용자번호(순번)',
+  `SEQ_NO` int(11) NOT NULL COMMENT '순번',
+
+  `CLOTH_TYPE` int(11) NOT NULL COMMENT '타입(1: 옷, 2: 수선, 3: 운동화)',
+  `CLOTH_GRP_NO` int(11) NOT NULL COMMENT '그룹번호(1: 상의, 2하의....)',
+  `CLOTH_SUB_GRP_NO` int(11) NOT NULL COMMENT '하위그룹번호(4: 티셔츠, 5: 니트 등등)',
+  `REPAIR_TEXT` TEXT COMMENT '수선정보',
+
+  `CLOTH_CNT` int(11) NOT NULL COMMENT '세탁물 갯수',
+  `CLOTH_PRICE` int(11) NOT NULL COMMENT '세탁물 가격',
+  PRIMARY KEY (`USER_NO`, `SEQ_NO`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='세탁물 정보';
+
+CREATE TABLE `cm_product_grp` (
+  `GRP_NO` int(11) NOT NULL COMMENT 'the group number',
+  `GRP_NAME` varchar(30) NOT NULL COMMENT 'the group name',
+  `PARENT_GRP_NO` int(11) DEFAULT NULL COMMENT 'the group parent group number',
+  `GRP_PRICE` int(11) DEFAULT 0 COMMENT 'the group price',
+  `USE_FLAG` int(11) NOT NULL DEFAULT 1 COMMENT 'the group use or not (0:not, 1:use)',
+  PRIMARY KEY (`GRP_NO`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='옷 종류와 가격'
+
+CREATE TABLE `cm_sms_send_hist` (
+  `USER_NO` int(11) NOT NULL COMMENT '사용자번호',
+  `YMDHMS` bigint(20) NOT NULL COMMENT '보낸시간',
+  `SEND_RESULT` int(11) NOT NULL COMMENT '실행결과(1: 성공, 2: 실패)',
+  `FAIL_CODE` varchar(100) DEFAULT NULL COMMENT '실패 코드',
+  `FAIL_MESSAGE` varchar(100) DEFAULT NULL COMMENT '실패메세지',
+  PRIMARY KEY (`USER_NO`,`YMDHMS`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='문자메세지 발송결과';

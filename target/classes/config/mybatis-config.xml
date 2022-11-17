@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+    
+<configuration>
+	<settings>
+        <setting name="logImpl" value="LOG4J"/>
+
+		<!-- ResultType이 map인 경우 값이 null일 때 column명을 key로 생성 -->
+		<setting name="callSettersOnNulls" value="true"/>
+
+		<setting name="jdbcTypeForNull" value="NULL"/>
+		<setting name="proxyFactory" value="CGLIB"/>
+	</settings>
+</configuration>

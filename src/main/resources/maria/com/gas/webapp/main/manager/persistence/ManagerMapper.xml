@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gas.webapp.main.manager.persistence.ManagerMapper">
+
+    <resultMap type="com.gas.webapp.main.manager.dto.ManagerDto" id="resultManager">
+        <result property="seqNo"    				column="SEQ_NO"/>
+        <result property="grpNo"    				column="GRP_NO"/>
+        <result property="grpName"    				column="GRP_NAME"/>
+        <result property="parentGrpNo"   			column="PARENT_GRP_NO"/>
+        <result property="grpPrice"    				column="GRP_PRICE"/>
+        <result property="useFlag"    				column="USE_FLAG"/>
+    </resultMap>
+
+
+    <select id="selectProductGroupList" resultMap="resultManager">
+        SELECT
+          GRP_NO,
+          GRP_NAME,
+          PARENT_GRP_NO,
+          GRP_PRICE,
+          USE_FLAG
+        FROM CM_PRODUCT_GRP
+        WHERE USE_FLAG = 1
+        ;
+    </select>
+
+    <select id="selectProductGroupListForList" resultMap="resultManager">
+        SELECT GRP_NO
+              , GRP_NAME
+              , PARENT_GRP_NO
+              , GRP_PRICE
+              , USE_FLAG
+          FROM CM_PRODUCT_GRP
+         WHERE USE_FLAG = 1
+          <choose>
+              <when test="parentGrpNo != null">
+                  AND PARENT_GRP_NO = #{parentGrpNo}
+              </when>
+              <otherwise>
+                  AND PARENT_GRP_NO IS NULL
+              </otherwise>
+          </choose>
+        ;
+    </select>
+
+    <select id="saveProductGroupList" resultMap="resultManager">
+      <foreach collection="list" item="item">
+        INSERT INTO CM_PRODUCT_GRP
+        (
+        GRP_NO,
+        GRP_NAME,
+        PARENT_GRP_NO,
+        GRP_PRICE,
+        USE_FLAG
+        )
+        VALUES
+        (
+        #{item.grpNo},
+        #{item.grpName},
+        #{item.parentGrpNo},
+        #{item.grpPrice},
+        #{item.useFlag}
+        )
+        ON DUPLICATE KEY UPDATE GRP_NO=#{item.grpNo};
+      </foreach>
+    </select>
+</mapper>
+
